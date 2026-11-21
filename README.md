@@ -224,15 +224,6 @@ vendor/bin/pint --format agent
 
 ---
 
-## 📄 Presentation & Documentation Artifacts
-
-* 📊 **PowerPoint Presentation:** [`UniReplay_5Min_Pitch.pptx`](UniReplay_5Min_Pitch.pptx) *(Ready for Microsoft PowerPoint & Google Slides)*
-* 🌐 **Interactive Web Slides:** [`presentation.html`](presentation.html) *(Built-in 5-minute stopwatch & Spoken Sinhala speaker notes)*
-* 📄 **Complete Technical Document:** [`UniReplay_Project_Documentation.docx`](UniReplay_Project_Documentation.docx) *(Full architectural specification)*
-* 📄 **Sinhala & English Guide:** [`UniReplay_Sinhala_English_Doc.docx`](UniReplay_Sinhala_English_Doc.docx) *(Bilingual reference manual)*
-
----
-
 ## 📜 License
 
 This project was built for the university hackathon and is open-sourced under the [MIT License](LICENSE).
