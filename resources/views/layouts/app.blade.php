@@ -60,6 +60,11 @@
                                    class="px-3 py-1.5 rounded-lg transition {{ request()->routeIs('bookmarks.*') ? 'bg-[#131D31] text-[#38BDF8] border border-cyan-500/30 shadow-sm font-semibold' : 'text-[#94A3B8] hover:text-white hover:bg-white/5' }}">
                                     Saved
                                 </a>
+                                <a href="{{ route('notes.index') }}" 
+                                   class="px-3 py-1.5 rounded-lg transition {{ request()->routeIs('notes.*') ? 'bg-[#131D31] text-[#38BDF8] border border-cyan-500/30 shadow-sm font-semibold' : 'text-[#94A3B8] hover:text-white hover:bg-white/5' }} flex items-center gap-1">
+                                    <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-400"></i>
+                                    <span>AI Notes</span>
+                                </a>
                             @endif
 
                             @if(auth()->user()->isAdmin())
@@ -151,6 +156,10 @@
                                     <a href="{{ route('bookmarks.index') }}" class="flex items-center gap-2.5 px-4 py-2 text-xs text-[#F8FAFC] hover:bg-[#141E34] transition">
                                         <i data-lucide="bookmark" class="w-4 h-4 text-cyan-400"></i>
                                         <span>Saved Lectures</span>
+                                    </a>
+                                    <a href="{{ route('notes.index') }}" class="flex items-center gap-2.5 px-4 py-2 text-xs text-[#F8FAFC] hover:bg-[#141E34] transition">
+                                        <i data-lucide="sparkles" class="w-4 h-4 text-amber-400"></i>
+                                        <span>My AI Study Notes</span>
                                     </a>
                                 @endif
 

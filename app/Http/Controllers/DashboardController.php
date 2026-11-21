@@ -47,6 +47,7 @@ class DashboardController extends Controller
             'approved_uploads' => $user->uploads()->where('status', 'approved')->count(),
             'bookmarks_count' => $user->bookmarks()->count(),
             'watched_count' => $user->watchHistories()->where('completed', true)->count(),
+            'notes_count' => $user->lectureNotes()->count(),
         ];
 
         return view('student.dashboard', compact(
