@@ -127,25 +127,81 @@
                           class="w-full px-3.5 py-2.5 rounded-xl border border-[#E5E2DC] bg-[#FAF8F5] text-xs text-[#17171D] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#7657F6]/30 focus:border-[#7657F6] transition">{{ old('description') }}</textarea>
             </div>
 
-            <!-- 4. Video File Upload -->
-            <div class="space-y-2 pt-2 border-t border-[#E5E2DC]">
-                <label class="block text-xs font-semibold text-[#17171D]">Video Recording File</label>
-                
-                <div class="border-2 border-dashed border-[#E5E2DC] hover:border-[#7657F6] rounded-2xl p-6 text-center bg-[#FAF8F5] transition">
-                    <i data-lucide="video" class="w-8 h-8 text-[#7657F6] mx-auto mb-2"></i>
-                    <p class="text-xs font-semibold text-[#17171D]">Choose video file or drag and drop</p>
-                    <p class="text-[11px] text-[#777681] mt-0.5">MP4, WebM, MOV, or MKV</p>
-                    <input type="file" 
-                           id="video_file" 
-                           name="video_file" 
-                           accept="video/mp4,video/webm,video/quicktime,video/x-matroska"
-                           class="mt-3 block w-full text-xs text-[#777681] file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-[#17171D] file:text-white hover:file:bg-[#24242D] cursor-pointer">
+            <!-- 4. Video Recording Source (Google Drive or File Upload) -->
+            <div class="space-y-4 pt-2 border-t border-[#E5E2DC]" x-data="{ uploadType: '{{ old('drive_url') ? 'drive' : 'drive' }}' }">
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                    <label class="block text-xs font-semibold text-[#17171D]">Video Recording Source *</label>
+                    
+                    <!-- Source Mode Toggle -->
+                    <div class="inline-flex p-1 bg-[#FAF8F5] rounded-xl border border-[#E5E2DC] text-[11px] font-medium">
+                        <button type="button" 
+                                @click="uploadType = 'drive'" 
+                                :class="uploadType === 'drive' ? 'bg-[#7657F6] text-white shadow-sm' : 'text-[#777681] hover:text-[#17171D]'"
+                                class="px-3 py-1 rounded-lg transition flex items-center gap-1.5">
+                            <i data-lucide="hard-drive" class="w-3.5 h-3.5"></i>
+                            <span>Google Drive Link (Recommended)</span>
+                        </button>
+                        <button type="button" 
+                                @click="uploadType = 'file'" 
+                                :class="uploadType === 'file' ? 'bg-[#7657F6] text-white shadow-sm' : 'text-[#777681] hover:text-[#17171D]'"
+                                class="px-3 py-1 rounded-lg transition flex items-center gap-1.5">
+                            <i data-lucide="upload" class="w-3.5 h-3.5"></i>
+                            <span>Direct File Upload</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Google Drive Input Option -->
+                <div x-show="uploadType === 'drive'" class="space-y-3">
+                    <div class="p-4 rounded-2xl bg-[#FAF8F5] border border-[#E5E2DC] space-y-3">
+                        <div class="flex items-start gap-3">
+                            <div class="w-8 h-8 rounded-xl bg-blue-100 flex items-center justify-center text-blue-600 shrink-0 mt-0.5">
+                                <i data-lucide="hard-drive" class="w-4 h-4"></i>
+                            </div>
+                            <div class="space-y-1">
+                                <label for="drive_url" class="block text-xs font-bold text-[#17171D]">Google Drive Shareable Link</label>
+                                <p class="text-[11px] text-[#777681]">
+                                    Upload your lecture to Google Drive, set access to <strong>"Anyone with the link can view"</strong>, and paste the link below.
+                                </p>
+                            </div>
+                        </div>
+
+                        <input type="text" 
+                               id="drive_url" 
+                               name="drive_url" 
+                               value="{{ old('drive_url') }}" 
+                               placeholder="https://drive.google.com/file/d/1a2b3c4d5e6f.../view?usp=sharing" 
+                               class="w-full px-3.5 py-2.5 rounded-xl border border-[#E5E2DC] bg-white text-xs text-[#17171D] focus:outline-none focus:ring-2 focus:ring-[#7657F6]/30 focus:border-[#7657F6] transition">
+
+                        @error('drive_url')
+                            <p class="text-xs text-rose-500 font-medium">{{ $message }}</p>
+                        @enderror
+
+                        <div class="flex items-center gap-2 text-[10px] text-[#777681] bg-white px-3 py-2 rounded-xl border border-[#E5E2DC]/80">
+                            <i data-lucide="check-circle" class="w-3.5 h-3.5 text-emerald-500 shrink-0"></i>
+                            <span>Fast & Unlimited: Directly streams without filling local server disk storage.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Direct File Upload Option -->
+                <div x-show="uploadType === 'file'" class="space-y-2" style="display: none;">
+                    <div class="border-2 border-dashed border-[#E5E2DC] hover:border-[#7657F6] rounded-2xl p-6 text-center bg-[#FAF8F5] transition">
+                        <i data-lucide="video" class="w-8 h-8 text-[#7657F6] mx-auto mb-2"></i>
+                        <p class="text-xs font-semibold text-[#17171D]">Choose video file or drag and drop</p>
+                        <p class="text-[11px] text-[#777681] mt-0.5">MP4, WebM, MOV, or MKV</p>
+                        <input type="file" 
+                               id="video_file" 
+                               name="video_file" 
+                               accept="video/mp4,video/webm,video/quicktime,video/x-matroska"
+                               class="mt-3 block w-full text-xs text-[#777681] file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-[#17171D] file:text-white hover:file:bg-[#24242D] cursor-pointer">
+                    </div>
                 </div>
 
                 <div class="p-3 rounded-xl bg-purple-50/70 border border-purple-200/60 flex items-center justify-between text-xs text-purple-900">
                     <span class="flex items-center gap-2">
                         <i data-lucide="sparkles" class="w-4 h-4 text-[#7657F6]"></i>
-                        <span>Hackathon Fast-Test: If no file is attached, UniReplay automatically binds a valid demo sample video!</span>
+                        <span>Hackathon Fast-Test: If neither is provided, UniReplay automatically binds a valid demo sample video!</span>
                     </span>
                 </div>
             </div>

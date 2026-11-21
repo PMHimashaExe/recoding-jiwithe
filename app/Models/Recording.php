@@ -16,6 +16,8 @@ class Recording extends Model
         'session_id',
         'part_number',
         'video_path',
+        'drive_url',
+        'drive_file_id',
         'original_filename',
         'status',
         'uploaded_by',
@@ -65,6 +67,46 @@ class Recording extends Model
     public function isRejected(): bool
     {
         return $this->status === 'rejected';
+    }
+
+    public function isDriveVideo(): bool
+    {
+        return ! empty($this->drive_file_id);
+    }
+
+    public function getDriveEmbedUrlAttribute(): ?string
+    {
+        if ($this->drive_file_id) {
+            return "https://drive.google.com/file/d/{$this->drive_file_id}/preview";
+        }
+
+        return null;
+    }
+
+    public static function extractDriveFileId(?string $url): ?string
+    {
+        if (! $url) {
+            return null;
+        }
+
+        $url = trim($url);
+
+        // Standard: https://drive.google.com/file/d/FILE_ID/...
+        if (preg_match('/\/file\/d\/([a-zA-Z0-9_-]+)/', $url, $matches)) {
+            return $matches[1];
+        }
+
+        // Query param: id=FILE_ID
+        if (preg_match('/[?&]id=([a-zA-Z0-9_-]+)/', $url, $matches)) {
+            return $matches[1];
+        }
+
+        // Direct File ID string
+        if (preg_match('/^[a-zA-Z0-9_-]{25,60}$/', $url)) {
+            return $url;
+        }
+
+        return null;
     }
 
     public function scopeApproved(Builder $query): Builder

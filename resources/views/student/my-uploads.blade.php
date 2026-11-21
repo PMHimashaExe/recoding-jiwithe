@@ -97,6 +97,12 @@
                             <span>Delivered on: <strong class="text-[#17171D]">{{ $upload->session->lecture_date->format('M d, Y') }}</strong></span>
                             <span>·</span>
                             <span>Submitted: <strong class="text-[#17171D]">{{ $upload->created_at->format('M d, Y @ h:i A') }}</strong></span>
+                            @if($upload->drive_file_id)
+                                <span>·</span>
+                                <span class="inline-flex items-center gap-1 text-[11px] font-semibold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md">
+                                    <i data-lucide="hard-drive" class="w-3 h-3"></i> Google Drive
+                                </span>
+                            @endif
                             @if($upload->duration)
                                 <span>·</span>
                                 <span>Duration: <strong class="text-[#17171D]">{{ $upload->duration }}</strong></span>

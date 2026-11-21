@@ -35,10 +35,18 @@
     <!-- Video Inspection Player Theater -->
     <div class="rounded-3xl bg-[#17171D] text-white overflow-hidden border border-[#24242D] shadow-2xl p-6 sm:p-8 space-y-6">
         <div class="relative aspect-video w-full rounded-2xl overflow-hidden bg-black shadow-inner flex items-center justify-center">
-            <video controls preload="metadata" class="w-full h-full object-contain">
-                <source src="{{ route('recordings.stream', $recording) }}" type="video/mp4">
-                Your browser does not support HTML5 video playback.
-            </video>
+            @if($recording->drive_file_id)
+                <iframe src="https://drive.google.com/file/d/{{ $recording->drive_file_id }}/preview" 
+                        class="w-full h-full border-0" 
+                        allow="autoplay; encrypted-media" 
+                        allowfullscreen>
+                </iframe>
+            @else
+                <video controls preload="metadata" class="w-full h-full object-contain">
+                    <source src="{{ route('recordings.stream', $recording) }}" type="video/mp4">
+                    Your browser does not support HTML5 video playback.
+                </video>
+            @endif
         </div>
 
         <div class="flex flex-wrap items-center justify-between gap-4 pt-4 border-t border-white/10">

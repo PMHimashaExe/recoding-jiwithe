@@ -29,14 +29,23 @@
             <!-- Video Player Element -->
             <div class="relative aspect-video w-full rounded-2xl overflow-hidden bg-black shadow-inner flex items-center justify-center">
                 @if($activeRecording)
-                    <video id="lecturePlayer"
-                           controls 
-                           preload="metadata"
-                           class="w-full h-full object-contain"
-                           controlsList="nodownload">
-                        <source src="{{ route('recordings.stream', $activeRecording) }}" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video>
+                    @if($activeRecording->drive_file_id)
+                        <iframe id="lectureDrivePlayer"
+                                src="https://drive.google.com/file/d/{{ $activeRecording->drive_file_id }}/preview" 
+                                class="w-full h-full border-0" 
+                                allow="autoplay; encrypted-media" 
+                                allowfullscreen>
+                        </iframe>
+                    @else
+                        <video id="lecturePlayer"
+                               controls 
+                               preload="metadata"
+                               class="w-full h-full object-contain"
+                               controlsList="nodownload">
+                            <source src="{{ route('recordings.stream', $activeRecording) }}" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    @endif
                 @else
                     <div class="text-center p-8 space-y-2">
                         <i data-lucide="video-off" class="w-8 h-8 text-gray-500 mx-auto"></i>

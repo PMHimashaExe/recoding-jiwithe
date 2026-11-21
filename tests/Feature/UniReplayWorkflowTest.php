@@ -218,4 +218,55 @@ class UniReplayWorkflowTest extends TestCase
 
         $response->assertSessionHasErrors('part_number');
     }
+
+    /**
+     * Test uploading with a Google Drive share link and playback embedding.
+     */
+    public function test_student_can_upload_recording_with_google_drive_link(): void
+    {
+        $batch = Batch::firstOrCreate(
+            ['batch_name' => 'Batch 2026 - Data & Computing'],
+            ['graduation_date' => '2026-12-15']
+        );
+
+        $subject = Subject::firstOrCreate(
+            ['subject_code' => 'SE302'],
+            ['subject_name' => 'Cloud Native Engineering', 'icon' => 'cloud']
+        );
+
+        $student = User::create([
+            'name' => 'Drive Tester',
+            'email' => 'drivetester@unireplay.edu',
+            'password' => bcrypt('password'),
+            'role' => 'student',
+            'status' => 'verified',
+            'batch_id' => $batch->id,
+        ]);
+
+        $driveUrl = 'https://drive.google.com/file/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OGvE2upms/view?usp=sharing';
+
+        $uploadResponse = $this->actingAs($student)->post(route('upload.store'), [
+            'subject_id' => $subject->id,
+            'batch_id' => $batch->id,
+            'lecture_date' => '2026-11-20',
+            'lecture_number' => 5,
+            'part_number' => 1,
+            'title' => 'Kubernetes Clustering Lecture',
+            'drive_url' => $driveUrl,
+        ]);
+
+        $uploadResponse->assertRedirect(route('my-uploads'));
+
+        $recording = Recording::where('uploaded_by', $student->id)->latest()->first();
+        $this->assertNotNull($recording);
+        $this->assertEquals('1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OGvE2upms', $recording->drive_file_id);
+        $this->assertTrue($recording->isDriveVideo());
+        $this->assertEquals('https://drive.google.com/file/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OGvE2upms/preview', $recording->drive_embed_url);
+
+        // Approve and verify show page embeds drive iframe
+        $recording->update(['status' => 'approved']);
+        $showResponse = $this->actingAs($student)->get(route('lectures.show', $recording->session));
+        $showResponse->assertOk();
+        $showResponse->assertSee('drive.google.com/file/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OGvE2upms/preview');
+    }
 }

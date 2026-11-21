@@ -34,6 +34,7 @@ class UploadController extends Controller
             'part_number' => ['required', 'integer', 'min:1'],
             'title' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string', 'max:2000'],
+            'drive_url' => ['nullable', 'string', 'max:500'],
             'video_file' => ['nullable', 'file', 'mimes:mp4,mov,avi,webm,mkv', 'max:512000'], // 500MB max for local demo
             'use_sample_video' => ['nullable', 'boolean'],
             'resource_title' => ['nullable', 'string', 'max:255'],
@@ -70,15 +71,28 @@ class UploadController extends Controller
             ]);
         }
 
-        // Handle video file storage
-        $videoPath = 'recordings/sample-demo.mp4';
+        // Handle video file storage or Google Drive link
+        $driveFileId = null;
+        $driveUrl = null;
+        $videoPath = null;
         $originalFilename = 'Sample_Lecture_Demo.mp4';
 
-        if ($request->hasFile('video_file') && $request->file('video_file')->isValid()) {
+        if (! empty($validated['drive_url'])) {
+            $driveFileId = Recording::extractDriveFileId($validated['drive_url']);
+            if (! $driveFileId) {
+                return back()->withInput()->withErrors([
+                    'drive_url' => 'Please provide a valid Google Drive sharing link (e.g., https://drive.google.com/file/d/.../view).',
+                ]);
+            }
+            $driveUrl = $validated['drive_url'];
+            $originalFilename = 'Google Drive Video';
+        } elseif ($request->hasFile('video_file') && $request->file('video_file')->isValid()) {
             $file = $request->file('video_file');
             $originalFilename = $file->getClientOriginalName();
-            $path = $file->store('recordings', 'public');
-            $videoPath = $path;
+            $videoPath = $file->store('recordings', 'public');
+        } else {
+            // Default sample demo fallback
+            $videoPath = 'recordings/sample-demo.mp4';
         }
 
         // Create the recording with status 'pending'
@@ -86,6 +100,8 @@ class UploadController extends Controller
             'session_id' => $session->id,
             'part_number' => $validated['part_number'],
             'video_path' => $videoPath,
+            'drive_url' => $driveUrl,
+            'drive_file_id' => $driveFileId,
             'original_filename' => $originalFilename,
             'status' => 'pending',
             'uploaded_by' => auth()->id(),
