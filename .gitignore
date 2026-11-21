@@ -22,6 +22,10 @@
 /storage/pail
 /vendor
 /tools/php
+~$*
+create_docx_docs.py
+create_sinhala_docx.py
+generate_pitch_deck.py
 _ide_helper.php
 Homestead.json
 Homestead.yaml
