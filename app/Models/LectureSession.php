@@ -67,6 +67,20 @@ class LectureSession extends Model
         return $this->hasMany(Bookmark::class, 'session_id');
     }
 
+    public function lectureNotes(): HasMany
+    {
+        return $this->hasMany(LectureNote::class, 'session_id');
+    }
+
+    public function userNote(?User $user): ?LectureNote
+    {
+        if (! $user) {
+            return null;
+        }
+
+        return $this->lectureNotes()->where('user_id', $user->id)->latest()->first();
+    }
+
     public function isBookmarkedBy(?User $user): bool
     {
         if (! $user) {

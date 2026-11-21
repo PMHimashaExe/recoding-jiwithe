@@ -24,6 +24,10 @@ class EnsureStudentVerified
         }
 
         if (! $user->isVerified()) {
+            if ($request->expectsJson()) {
+                abort(403, 'Your student account is pending administrator verification.');
+            }
+
             return redirect()->route('verification.notice');
         }
 

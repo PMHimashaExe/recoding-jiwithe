@@ -83,6 +83,11 @@ class User extends Authenticatable
         return $this->hasMany(AppNotification::class)->latest();
     }
 
+    public function lectureNotes(): HasMany
+    {
+        return $this->hasMany(LectureNote::class)->latest();
+    }
+
     public function unreadNotifications(): HasMany
     {
         return $this->hasMany(AppNotification::class)->where('is_read', false)->latest();

@@ -8,6 +8,7 @@ use App\Http\Controllers\BookmarkController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LectureController;
+use App\Http\Controllers\LectureNoteController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\UploadController;
 use Illuminate\Support\Facades\Route;
@@ -59,6 +60,12 @@ Route::middleware('auth')->group(function () {
         // Bookmarks
         Route::get('/bookmarks', [BookmarkController::class, 'index'])->name('bookmarks.index');
         Route::post('/bookmarks/{session}/toggle', [BookmarkController::class, 'toggle'])->name('bookmarks.toggle');
+
+        // AI Smart Lecture Notes
+        Route::get('/my-notes', [LectureNoteController::class, 'index'])->name('notes.index');
+        Route::post('/lectures/{session}/notes/generate', [LectureNoteController::class, 'generate'])->name('lectures.notes.generate');
+        Route::put('/notes/{note}', [LectureNoteController::class, 'update'])->name('notes.update');
+        Route::get('/notes/{note}/download', [LectureNoteController::class, 'download'])->name('notes.download');
     });
 
     // Protected Admin Routes

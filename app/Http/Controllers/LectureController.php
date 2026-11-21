@@ -115,8 +115,19 @@ class LectureController extends Controller
             ->get();
 
         $isBookmarked = auth()->check() ? $session->isBookmarkedBy(auth()->user()) : false;
+        $existingNote = auth()->check() ? $session->userNote(auth()->user()) : null;
+        $initialNoteData = $existingNote ? [
+            'id' => $existingNote->id,
+            'title' => $existingNote->title,
+            'note_type' => $existingNote->note_type,
+            'badge' => $existingNote->note_type_badge,
+            'key_takeaways' => $existingNote->key_takeaways,
+            'content' => $existingNote->content,
+            'student_notes' => $existingNote->student_notes,
+            'updated_at' => $existingNote->updated_at->diffForHumans(),
+        ] : null;
 
-        return view('lectures.show', compact('session', 'activeRecording', 'approvedRecordings', 'relatedSessions', 'isBookmarked'));
+        return view('lectures.show', compact('session', 'activeRecording', 'approvedRecordings', 'relatedSessions', 'isBookmarked', 'existingNote', 'initialNoteData'));
     }
 
     /**
