@@ -173,19 +173,19 @@
             </div>
         </div>
 
-        <!-- Queue 2: Pending Recording Approvals for Admin Batch -->
+        <!-- Queue 2: Pending Recording Approvals -->
         <div class="space-y-4">
             <div class="flex items-center justify-between">
                 <div class="flex items-center gap-2">
                     <span class="w-2.5 h-2.5 rounded-full bg-cyan-400 shadow-[0_0_6px_#38BDF8]"></span>
                     <h2 class="font-display font-bold text-lg text-white">Recording Moderation Queue</h2>
-                    @if($pendingRecordingsBatchCount > 0)
+                    @if($totalPendingRecordings > 0)
                         <span class="px-2 py-0.2 rounded-full text-xs font-bold bg-cyan-400 text-black">
-                            {{ $pendingRecordingsBatchCount }}
+                            {{ $totalPendingRecordings }}
                         </span>
                     @endif
                 </div>
-                <a href="{{ route('admin.recordings.index', ['status' => 'pending', 'scope' => 'my_batch']) }}" class="text-xs font-semibold text-cyan-400 hover:text-cyan-300">
+                <a href="{{ route('admin.recordings.index', ['status' => 'pending', 'scope' => 'all']) }}" class="text-xs font-semibold text-cyan-400 hover:text-cyan-300">
                     View All
                 </a>
             </div>

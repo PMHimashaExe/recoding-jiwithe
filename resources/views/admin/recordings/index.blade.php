@@ -14,16 +14,18 @@
             </p>
         </div>
 
-        <!-- Batch Scope Toggle Pill: My Batch vs All Batches -->
+        <!-- Batch Scope Toggle Pill: All Batches vs My Batch -->
         <div class="flex items-center gap-1 p-1 rounded-xl bg-[#0D1322] border border-[#1E283D] shadow-sm text-xs self-start sm:self-auto">
-            <a href="{{ route('admin.recordings.index', ['status' => $status, 'scope' => 'my_batch']) }}" 
-               class="px-3 py-1.5 rounded-lg font-semibold transition {{ $scope === 'my_batch' ? 'bg-sky-500 text-black font-bold shadow-md shadow-sky-500/20' : 'text-slate-400 hover:text-white' }}">
-                {{ $admin->batch ? $admin->batch->batch_name : 'My Batch' }}
-            </a>
             <a href="{{ route('admin.recordings.index', ['status' => $status, 'scope' => 'all']) }}" 
                class="px-3 py-1.5 rounded-lg font-semibold transition {{ $scope === 'all' ? 'bg-sky-500 text-black font-bold shadow-md shadow-sky-500/20' : 'text-slate-400 hover:text-white' }}">
                 All University Batches
             </a>
+            @if($admin->batch)
+                <a href="{{ route('admin.recordings.index', ['status' => $status, 'scope' => 'my_batch']) }}" 
+                   class="px-3 py-1.5 rounded-lg font-semibold transition {{ $scope === 'my_batch' ? 'bg-sky-500 text-black font-bold shadow-md shadow-sky-500/20' : 'text-slate-400 hover:text-white' }}">
+                    {{ $admin->batch->batch_name }} Only
+                </a>
+            @endif
         </div>
     </div>
 

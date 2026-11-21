@@ -36,18 +36,13 @@ class AdminDashboardController extends Controller
             ->where('role', 'student')
             ->where('status', 'pending')
             ->latest()
-            ->take(6)
+            ->take(10)
             ->get();
 
         $pendingRecordings = Recording::with(['session.subject', 'session.batch', 'uploader'])
             ->where('status', 'pending')
-            ->when($admin->batch_id, function ($q) use ($admin) {
-                $q->whereHas('session', function ($sq) use ($admin) {
-                    $sq->where('batch_id', $admin->batch_id);
-                });
-            })
             ->latest()
-            ->take(6)
+            ->take(10)
             ->get();
 
         // Recent approvals activity

@@ -17,7 +17,7 @@ class RecordingApprovalController extends Controller
         $admin = $request->user();
         $status = $request->input('status', 'pending');
         $batchId = $request->input('batch_id');
-        $scope = $request->input('scope', $admin->batch_id ? 'my_batch' : 'all');
+        $scope = $request->input('scope', 'all');
 
         $query = Recording::with(['session.subject', 'session.batch', 'uploader', 'reviewer']);
 
@@ -46,8 +46,18 @@ class RecordingApprovalController extends Controller
                         $sq->where('batch_id', $admin->batch_id);
                     });
                 })->count(),
-            'approved' => Recording::where('status', 'approved')->count(),
-            'rejected' => Recording::where('status', 'rejected')->count(),
+            'approved' => Recording::where('status', 'approved')
+                ->when($scope === 'my_batch' && $admin->batch_id, function ($q) use ($admin) {
+                    $q->whereHas('session', function ($sq) use ($admin) {
+                        $sq->where('batch_id', $admin->batch_id);
+                    });
+                })->count(),
+            'rejected' => Recording::where('status', 'rejected')
+                ->when($scope === 'my_batch' && $admin->batch_id, function ($q) use ($admin) {
+                    $q->whereHas('session', function ($sq) use ($admin) {
+                        $sq->where('batch_id', $admin->batch_id);
+                    });
+                })->count(),
         ];
 
         return view('admin.recordings.index', compact(
