@@ -215,6 +215,8 @@ class DatabaseSeeder extends Seeder
             'session_id' => $sess2->id,
             'part_number' => 1,
             'video_path' => 'recordings/sample-demo.mp4',
+            'drive_url' => 'https://drive.google.com/file/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OGvE2upms/view?usp=sharing',
+            'drive_file_id' => '1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OGvE2upms',
             'original_filename' => 'CS204_Lec07_Part1_1NF_to_3NF.mp4',
             'status' => 'approved',
             'uploaded_by' => $alex->id,
