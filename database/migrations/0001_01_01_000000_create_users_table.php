@@ -17,6 +17,11 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->string('role')->default('student'); // 'student', 'admin'
+            $table->string('status')->default('pending'); // 'pending', 'verified', 'rejected'
+            $table->foreignId('batch_id')->nullable()->constrained('batches')->nullOnDelete();
+            $table->string('student_id_number')->nullable();
+            $table->string('avatar_color')->default('#7657F6');
             $table->rememberToken();
             $table->timestamps();
         });
