@@ -2,4 +2,7 @@
 .github
 .agents
 tests
+tools
 node_modules
+.env
+.env.*

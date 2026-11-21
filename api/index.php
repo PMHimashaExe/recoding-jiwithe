@@ -2,6 +2,9 @@
 
 // Ensure serverless /tmp directories exist for Laravel storage & caching
 $dirs = [
+    '/tmp/views',
+    '/tmp/sessions',
+    '/tmp/cache',
     '/tmp/storage/app/public',
     '/tmp/storage/framework/cache',
     '/tmp/storage/framework/views',
@@ -11,7 +14,7 @@ $dirs = [
 
 foreach ($dirs as $dir) {
     if (! is_dir($dir)) {
-        mkdir($dir, 0777, true);
+        @mkdir($dir, 0777, true);
     }
 }
 
