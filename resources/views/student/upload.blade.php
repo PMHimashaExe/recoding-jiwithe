@@ -198,12 +198,12 @@
                     </div>
                 </div>
 
-                <div class="p-3 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-between text-xs text-amber-300">
-                    <span class="flex items-center gap-2">
-                        <i data-lucide="sparkles" class="w-4 h-4 text-amber-400"></i>
-                        <span>Hackathon Fast-Test: If neither is provided, UniReplay automatically binds a valid demo sample video!</span>
-                    </span>
-                </div>
+                @error('video_source')
+                    <div class="p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 flex items-center gap-2 text-xs text-rose-300">
+                        <i data-lucide="alert-circle" class="w-4 h-4 text-rose-400 shrink-0"></i>
+                        <span>{{ $message }}</span>
+                    </div>
+                @enderror
             </div>
 
             <!-- 5. Optional Study Materials Attachment -->

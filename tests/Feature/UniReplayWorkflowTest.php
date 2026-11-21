@@ -8,6 +8,7 @@ use App\Models\Recording;
 use App\Models\Subject;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
@@ -103,6 +104,7 @@ class UniReplayWorkflowTest extends TestCase
                 'part_number' => 1,
                 'title' => 'Event Sourcing with Kafka in Production',
                 'description' => 'Complete walkthrough of state transitions and replay mechanisms.',
+                'video_file' => UploadedFile::fake()->create('lecture_event_sourcing.mp4', 1024, 'video/mp4'),
                 'resource_title' => 'Architecture Cheatsheet',
                 'resource_link' => 'https://docs.unireplay.edu/events',
             ]);
@@ -214,9 +216,48 @@ class UniReplayWorkflowTest extends TestCase
                 'lecture_number' => 20,
                 'part_number' => 1,
                 'title' => 'Unique Constraint Test Session',
+                'video_file' => UploadedFile::fake()->create('test.mp4', 500, 'video/mp4'),
             ]);
 
         $response->assertSessionHasErrors('part_number');
+    }
+
+    /**
+     * Test uploading fails if neither a file nor a Google Drive link is provided.
+     */
+    public function test_upload_fails_without_video_source(): void
+    {
+        $batch = Batch::firstOrCreate(
+            ['batch_name' => 'Batch 2026 - Data & Computing'],
+            ['graduation_date' => '2026-12-15']
+        );
+
+        $subject = Subject::firstOrCreate(
+            ['subject_code' => 'SE303'],
+            ['subject_name' => 'Security Engineering', 'icon' => 'shield']
+        );
+
+        $student = User::create([
+            'name' => 'No Video Tester',
+            'email' => 'novideo@unireplay.edu',
+            'password' => bcrypt('password'),
+            'role' => 'student',
+            'status' => 'verified',
+            'batch_id' => $batch->id,
+        ]);
+
+        $response = $this->actingAs($student)
+            ->from(route('upload.create'))
+            ->post(route('upload.store'), [
+                'subject_id' => $subject->id,
+                'batch_id' => $batch->id,
+                'lecture_date' => '2026-11-20',
+                'lecture_number' => 1,
+                'part_number' => 1,
+                'title' => 'No Video Provided Test',
+            ]);
+
+        $response->assertSessionHasErrors('video_source');
     }
 
     /**

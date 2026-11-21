@@ -75,7 +75,7 @@ class UploadController extends Controller
         $driveFileId = null;
         $driveUrl = null;
         $videoPath = null;
-        $originalFilename = 'Sample_Lecture_Demo.mp4';
+        $originalFilename = null;
 
         if (! empty($validated['drive_url'])) {
             $driveFileId = Recording::extractDriveFileId($validated['drive_url']);
@@ -85,14 +85,15 @@ class UploadController extends Controller
                 ]);
             }
             $driveUrl = $validated['drive_url'];
-            $originalFilename = 'Google Drive Video';
+            $originalFilename = 'Google Drive Lecture Video';
         } elseif ($request->hasFile('video_file') && $request->file('video_file')->isValid()) {
             $file = $request->file('video_file');
             $originalFilename = $file->getClientOriginalName();
             $videoPath = $file->store('recordings', 'public');
         } else {
-            // Default sample demo fallback
-            $videoPath = 'recordings/sample-demo.mp4';
+            return back()->withInput()->withErrors([
+                'video_source' => 'Please provide a Google Drive video link or upload a video file to proceed.',
+            ]);
         }
 
         // Create the recording with status 'pending'
