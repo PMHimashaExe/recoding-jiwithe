@@ -35,7 +35,7 @@ class UploadController extends Controller
             'title' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string', 'max:2000'],
             'drive_url' => ['nullable', 'string', 'max:500'],
-            'video_file' => ['nullable', 'file', 'mimes:mp4,mov,avi,webm,mkv', 'max:512000'], // 500MB max for local demo
+            'video_file' => ['nullable', 'file', 'mimes:mp4,mov,avi,webm,mkv', 'max:1024000'], // 1GB max
             'use_sample_video' => ['nullable', 'boolean'],
             'resource_title' => ['nullable', 'string', 'max:255'],
             'resource_file' => ['nullable', 'file', 'mimes:pdf,ppt,pptx,zip,rar,doc,docx', 'max:51200'],

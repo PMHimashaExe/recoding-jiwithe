@@ -189,7 +189,7 @@
                     <div class="border-2 border-dashed border-[#1E283D] hover:border-cyan-400 rounded-2xl p-6 text-center bg-[#090D18] transition">
                         <i data-lucide="video" class="w-8 h-8 text-amber-400 mx-auto mb-2"></i>
                         <p class="text-xs font-semibold text-white">Choose video file or drag and drop</p>
-                        <p class="text-[11px] text-[#94A3B8] mt-0.5">MP4, WebM, MOV, or MKV</p>
+                        <p class="text-[11px] text-[#94A3B8] mt-0.5">MP4, WebM, MOV, or MKV (up to 1GB)</p>
                         <input type="file" 
                                id="video_file" 
                                name="video_file" 
