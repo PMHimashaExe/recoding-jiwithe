@@ -5,12 +5,14 @@ namespace Database\Seeders;
 use App\Models\AppNotification;
 use App\Models\Batch;
 use App\Models\Bookmark;
+use App\Models\LectureNote;
 use App\Models\LectureSession;
 use App\Models\Recording;
 use App\Models\Resource;
 use App\Models\Subject;
 use App\Models\User;
 use App\Models\WatchHistory;
+use App\Services\LectureNoteGeneratorService;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -380,6 +382,30 @@ class DatabaseSeeder extends Seeder
             'type' => 'system',
             'link' => '/my-uploads',
             'is_read' => false,
+        ]);
+
+        // 7. Seed Sample AI Study Notes
+        $noteService = new LectureNoteGeneratorService;
+        $genNote1 = $noteService->generate($sess1, 'summary');
+        LectureNote::create([
+            'user_id' => $alex->id,
+            'session_id' => $sess1->id,
+            'title' => $genNote1['title'],
+            'note_type' => $genNote1['note_type'],
+            'key_takeaways' => $genNote1['key_takeaways'],
+            'content' => $genNote1['content'],
+            'student_notes' => "Important: Lecturer highlighted that Slide 18's Event-Driven Saga Pattern will be in the mid-term examination compulsory section!",
+        ]);
+
+        $genNote2 = $noteService->generate($sess2, 'cheat_sheet');
+        LectureNote::create([
+            'user_id' => $alex->id,
+            'session_id' => $sess2->id,
+            'title' => $genNote2['title'],
+            'note_type' => $genNote2['note_type'],
+            'key_takeaways' => $genNote2['key_takeaways'],
+            'content' => $genNote2['content'],
+            'student_notes' => 'Reviewed query plans for 5NF decomposition.',
         ]);
     }
 }

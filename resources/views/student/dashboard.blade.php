@@ -52,7 +52,7 @@
         </div>
 
         <!-- Quick Metrics Sub-Row -->
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-8 pt-6 border-t border-[#1E283D] relative z-10">
+        <div class="grid grid-cols-2 sm:grid-cols-5 gap-4 mt-8 pt-6 border-t border-[#1E283D] relative z-10">
             <div>
                 <span class="text-[11px] text-[#94A3B8] uppercase font-semibold tracking-wider">My Submissions</span>
                 <p class="font-display font-bold text-xl text-white mt-0.5">{{ $stats['uploads_count'] }}</p>
@@ -64,6 +64,13 @@
             <div>
                 <span class="text-[11px] text-[#94A3B8] uppercase font-semibold tracking-wider">Saved Lectures</span>
                 <p class="font-display font-bold text-xl text-amber-400 mt-0.5">{{ $stats['bookmarks_count'] }}</p>
+            </div>
+            <div>
+                <span class="text-[11px] text-[#94A3B8] uppercase font-semibold tracking-wider">AI Study Notes</span>
+                <a href="{{ route('notes.index') }}" class="font-display font-bold text-xl text-amber-300 hover:text-amber-200 flex items-center gap-1 mt-0.5 group">
+                    <span>{{ $stats['notes_count'] }}</span>
+                    <i data-lucide="arrow-up-right" class="w-3.5 h-3.5 opacity-60 group-hover:opacity-100 transition"></i>
+                </a>
             </div>
             <div>
                 <span class="text-[11px] text-[#94A3B8] uppercase font-semibold tracking-wider">Completed Sessions</span>
